@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modal分发</title>
+    <link rel="stylesheet" href=" http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/vue/2.1.3/vue.js"></script>
+</head>
+<body>
+<script id="modalTpl" text="x-template">
+    <div role="dialog">
+        <div role="document" v-bind:style="{width:optionalWidth}">
+        <div class="modal-content">
+        <slot name="modal-header">
+        <div class="modal-header">
+        <button type="button" class="close" @click="close">
+        <span>&times;</span>
+    </button>
+    <h4 class="modal-title">
+        <slot name="title">{{title}}</slot>
+    </h4>
+    </div>
+    </slot>
+    <slot name="modal-body">
+        <div class="modal-body"></div>
+        </slot>
+        <slot name="modal-footer">
+        <div class="modal-footer">
+        <button type="button" class="btn btn-default" @click="close">取消</button>
+        <button type="button" class="btn btn-primary" @click="callback">确定</button>
+        </div>
+        </slot>
+        </div>
+        </div>
+        </div>
+</script>
+</body>
+</html>
+<script>
+    Vue.component("modal",{
+        template:"#modalTpl",//获取HTML结构
+        props:{
+            title:{//modal标题
+                type:String,
+                dafault:""
+            },
+            show:{//控制modal是否显示
+                required:true,
+                type:Boolean,
+                twoWay:true
+            },
+            width:{
+                default:null
+            },
+            callback:{
+                type:Function,
+                default:function(){}
+            }
+        },
+        computed:{//计算属性
+            optionalWidth(){//处理props的width属性
+                if(this.width===null){
+                    return null;
+                }else if(Number.isInteger(this.width)){
+                    return this.width+"px";
+                }
+                return this.width;
+            }
+        },
+        watch:{
+            show(val){//show值变化是调用此函数
+                var el=this.$el;
+                if(val){
+                    el.style.display='block';//show为true时，显示根元素
+                }else{
+                    el.style.display='none';
+                }
+            }
+        },
+        methods:{
+            close(){
+                this.show=false;
+            }
+        }
+    })
+</script>

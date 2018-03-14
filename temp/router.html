@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VueRouter</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<div id="app">
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><router-link to="/home">Home</router-link></li>
+                    <li><router-link to="/list">List</router-link></li>
+                    <li><router-link to="/detail">Detail</router-link></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <router-view></router-view>
+    </div>
+</div>
+</body>
+</html>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="../node_modules/vue-router/dist/vue-router.js"></script>
+<script>
+
+    var Home=Vue.extend({
+        template:'<h1>首页</h1>'
+    })
+    var Home={template:'<h1>首页</h1>'};
+    var List={ template:"<div><ul style='float: left'><li><router-link to='/list/all'>A</router-link></li><li><router-link to='/user/2'>B</router-link></li><li>C</li></ul><router-view></router-view></div>"};
+    var Detail={template:"<h1>详情页</h1>"}
+    var User={template:"<h1 style='float: right'>User{{$route}}</h1>"}
+    var routes=[
+        {path:'/home',component:Home},
+        {path:'/list',component:List,children:[
+            {path:"all",component:User}
+        ]},
+        {path:'/detail',component:Detail}
+    ]
+    var router=new VueRouter({
+        routes:routes
+    });
+    router.push({name:"home"})
+var app=new Vue({
+    router:router
+}).$mount("#app")
+
+</script>

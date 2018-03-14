@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+
+    <title>vue</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+       .wrap div{
+           margin: 0 auto;
+           text-align: center;
+       }
+        #app2{
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+        }
+        .c{
+           color: red;
+        }
+        .outer{
+            padding: 50px 0;
+            width: 200px;
+            height: 100px;
+            background: #00b3ee;
+            text-align: center;
+        }
+        .inner{
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            background-color: #ff8500;
+        }
+        .wrap{
+            float: left;
+            width: 25%;
+        }
+       .wrap:nth-child(odd){
+           background-color:#99ee99
+       }
+        .block{
+            padding: 10px 0;
+            border-bottom: 2px dashed #3afefd;
+        }
+        #app19{
+            word-wrap: break-word;
+        }
+        #app20{
+            width: 150px;
+            height: 50px;
+            border: 5px solid #3afefd;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" >
+<div class="block" id="app1">
+   <p v-if="ok" v-on:click="clickHander">{{message}}</p>
+    <input type="text" v-model="message">
+</div>
+
+<div class="block" id="app2" v-on:click="clickHander"></div>
+<div class="block" id="app3"><test></test></div>
+<div class="block" id="app4"><child></child></div>
+<div class="block" id="app5"><label for="r1">修改颜色</label><input type="checkbox" v-model="class1" id="r1"><br><div  v-bind:class="{'c':class1}">海纳百川</div></div>
+<div class="block" id="app6">
+    <ul>
+        <li v-for="site in sites">{{site.name}}</li>
+    </ul>
+</div>
+<div class="block" id="app7">
+    <ul>
+        <li v-for="(value, key) in object">{{key}}:{{value}}</li>
+    </ul>
+</div>
+<div class="block" id="app8">
+    <input type="text" v-model="message">
+    <div>{{reverseMessage}}</div>
+</div>
+<div class="block" id="app9"><p>{{site}}</p></div>
+<div class="block" id="app10">
+    <button v-on:click="count+=1">增加一次</button>
+    <button v-on:click="count-=1">减少一次</button>
+    <p>点击{{count}}次</p>
+</div>
+<div class="block" id="app11">
+    <div class="outer" v-on:click.self="doOuter"><div class="inner" v-on:click.on="doInner"></div></div>
+</div>
+<div class="block" id="app12">
+    <select v-model="select" name="fruit" id="">
+    <option value="">选择一个网站</option>
+    <option value="http://www.iautos.cn">第一车网</option>
+    <option value="http://www.alibaba.com">阿里巴巴</option>
+    <option value="http://www.tencent.com">腾讯</option>
+     </select>
+    <div>选择的是：<a v-bind:href="select">{{select}}</a></div>
+</div>
+</div>
+<div  class="wrap">
+    <div class="block" id="app13">
+        <Parent message="这是一个全局组件"></Parent>
+    </div>
+    <div class="block" id="app14" style="text-align: left">
+        父组件：<input type="text" v-model="message">
+        <br>
+        子组件：<child v-bind:message="message"></child>
+    </div>
+    <div class="block" id="app15">
+        <ul>
+            <to-item v-for="(value,key) in sites" v-bind:attr="key" v-bind:message="value"></to-item>
+        </ul>
+    </div>
+    <div class="block" id="app16">
+        <div id="rapper">
+            <p>{{total}}</p>
+            <button-controller v-on:increment="incrementTotal"></button-controller>
+            <button-controller v-on:increment="incrementTotal"></button-controller>
+        </div>
+    </div>
+    <div class="block" id="app17">
+        <p>input获取焦点指令</p>
+        <input type="text" v-focus>
+    </div>
+    <div class="block" id="app18">
+        <div id="app18-1">
+            <p v-all>我是全局指令</p>
+        </div>
+        <div id="app18-2">
+            <p v-part>我是局部指令</p>
+        </div>
+    </div>
+    <div class="block" id="app19" v-teddy:hello.a.b="message"></div>
+    <div class="block" id="app20"  v-teddy="{aa:'red'}" ><div id="app20-1" style="width: 50px;height: 25px" v-center="white"></div></div>
+    <div class="block" id="app21">
+        <p>
+            <router-link to="/key">GO TO KEY</router-link>
+            <router-link to="/value">GO TO VALUE</router-link>
+        </p>
+        <router-view></router-view>
+    </div>
+
+</div>
+</body>
+</html>
+<script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/vue-router/2.7.0/vue-router.min.js"></script>
+<script>
+    new Vue({
+        el: '#app1',
+        data: {
+            ok: true,
+            message: 'RUNOOB',
+            id : 1
+        },
+        methods:{
+            clickHander:function () {
+                var color=this.$el.style.backgroundColor;
+                if(color=='red'){
+                    this.$el.style.backgroundColor='blue';
+                }else {this.$el.style.backgroundColor='red';}
+
+            }
+        }
+
+    });
+ new  Vue({
+        el:'#app2',
+        methods:{
+            clickHander:function () {
+                var color=this.$el.style.backgroundColor;
+                if(color=='red'){
+                    this.$el.style.backgroundColor='blue';
+                }else {this.$el.style.backgroundColor='red';}
+
+            }
+        }
+    })
+    Vue.component("test",{
+        template:"<h1>Teddy</h1>"
+    })
+    new Vue({
+        el:"#app3"
+    })
+    var Child={
+     template:"<h2>Teddy</h2>"
+    }
+    new Vue({
+        el:"#app4",
+        components:{
+            "child":Child
+        }
+    })
+    new Vue({
+        el:"#app5",
+        data:{
+            class1:false
+        }
+    })
+    new Vue({
+        el:"#app6",
+        data:{
+            sites:[
+                {name:"one"},
+                {name:"two"},
+                {name:"three"}
+            ]
+        }
+    })
+    new Vue({
+        el:"#app7",
+        data:{
+            object:{
+                姓名:"teddy",
+                年龄:"23",
+                性别:"男"
+            }
+        }
+    })
+    new Vue({
+        el:"#app8",
+        data:{
+            message:"abcde"
+        },
+        computed:{
+            reverseMessage:function () {
+                console.log(this)
+               return this.message.split("").reverse().join("");
+            }
+        }
+    })
+    var vm=new Vue({
+        el:"#app9",
+        data:{
+            name:"teddy",
+            age:"21"
+        },
+        computed:{
+            site:{
+               get:function () {
+                   return this.name+' '+this.age
+               },
+                set:function (newValue) {
+                   var names=newValue.split(" ");
+                   this.name=names[0];
+                   this.age=names[names.length-1]
+                }
+            }
+        }
+    })
+    new Vue({
+        el:"#app10",
+        data:{
+            count:0
+        }
+    })
+    new Vue({
+        el:'#app11',
+        data:{
+
+        },
+        methods:{
+            doOuter:function () {
+                var ele=document.getElementsByClassName("inner")[0];
+                var color=ele.style.backgroundColor;
+                if(color=='rgb(255, 133, 0)'){
+                    ele.style.backgroundColor='#FF62BE';
+                }else {ele.style.backgroundColor='#ff8500';}
+            },
+            doInner:function () {
+                var ele=document.getElementsByClassName("outer")[0];
+                var color=ele.style.backgroundColor;
+                if(color=='rgb(0, 179, 238)'){
+                    ele.style.backgroundColor='#1FEE5A';
+                }else {ele.style.backgroundColor='#00b3ee';}
+            }
+        }
+    })
+    new Vue({
+        el:"#app12",
+        data:{
+            select:''
+        }
+    })
+
+    Vue.component("Parent",{
+        props:['message'],
+        template:"<h1>{{message}}</h1>"
+    })
+    new Vue({
+        el:"#app13"
+    })
+    Vue.component("child",{
+        props:["message"],
+        template:"<span>{{message}}</span>"
+    })
+    new Vue({
+        el:"#app14",
+        data:{
+            message:"你好"
+        }
+    })
+    Vue.component("to-item",{
+        props:["attr","message"],
+        template:"<li>{{attr}}:{{message}}</li>"
+    })
+    new Vue({
+        el:"#app15",
+        data:{
+            sites: {
+              name:"teddy",
+              age:"21",
+                sex:"男"
+
+            }
+        }
+    })
+    Vue.component("example",{
+        props:{
+            propA:{
+                type:Number,
+                required:true
+            },
+            propB:{
+                type:String,
+                default:"abc"
+            },
+            propC:{
+                type:Object,
+                default:function () {/*数组、对象的默认值应该由一个工厂函数返回*/
+                    return {message:"hello"}
+                }
+            }
+        }
+    })
+    Vue.component("button-controller",{
+        template:"<button v-on:click='increment'>{{counter}}</button>",
+        data:function () {
+            return {
+                counter:0
+            }
+        },
+        methods:{
+            increment:function () {
+                this.counter+=1;
+                this.$emit("increment")
+            }
+        }
+    })
+    new Vue({
+        el:"#rapper",
+        data:{
+            total:0
+        },
+        methods:{
+            incrementTotal:function () {
+                this.total+=1
+            }
+        }
+    })
+    Vue.directive("focus",{
+        inserted:function (el) {
+            el.focus()
+        }
+    })
+    new Vue({
+        el:"#app17"
+    })
+    new Vue({
+        el:"#app18-2",
+        directives:{
+            part:{
+                inserted:function (el) {
+                    el.style.color="blue";
+                }
+            }
+        }
+    })
+    Vue.directive("all",{
+        inserted:function (el) {
+            el.style.color="red"
+        }
+    })
+    new Vue({
+        el:"#app18"
+    })
+    Vue.directive("teddy",{
+        bind:function (el,binding,vnode) {
+            var s=JSON.stringify;
+            el.innerHTML=
+                "name:"+s(binding.name)+"<br>"+
+                "value:"+s(binding.value)+"<br>"+
+                "expression:"+s(binding.expression)+"<br>"+
+                "argument:"+s(binding.arg)+"<br>"+
+                "modifiers:"+s(binding.modifiers)+"<br>"+
+                "vnode keys:"+Object.keys(vnode).join(",")
+        }
+    })
+    new Vue({
+        el:"#app19",
+        data:{
+            message:"VUE"
+        }
+    })
+    new Vue({
+        el:"#app20-1",
+        data:{
+            white:"#fff"
+        },
+        directive:{
+            center:{
+                inserted:function (el,binding) {
+                    el.style.backgroundColor=binding.value;
+                }
+            }
+        }
+    })
+    Vue.directive("teddy",
+        function (el,binding) {
+            el.style.backgroundColor=binding.value.aa;
+        })
+    new Vue({
+        el:"#app20",
+        data:{
+            white:"#fff"
+        }
+    })
+    var Key={template:"<div>name</div>"};
+    var Value={template:"<div>teddy</div>"};
+    var routes=[
+        {path:"/key",component:Key},
+        {path:"/value",component:Value}
+    ]
+    var router = new VueRouter({
+        routes: routes
+    })
+    var app = new Vue({
+        router:router
+    }).$mount("#app21")
+
+</script>
+<!--
+<script>
+    var carMsgs=document.getElementsByClassName("car-msg");
+    for(var i=0;i<carMsgs.length;i++){
+        var carMsg=carMsgs[i];
+        for(var j=0;j<(carMsg.children).length;j++){
+            carMsg.children[j].style.height=(parseFloat(getComputedStyle(carMsg).height)-parseFloat(getComputedStyle(carMsg).padding)*2)+"px";
+        }
+    }
+</script>-->

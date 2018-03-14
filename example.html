@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue例子</title>
+    <link rel="icon" href="./image/logo.png">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./css/example.css">
+    <script src="./js/libs/vue.min.js"></script>
+    <script src="./js/libs/vue-router.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <div class="box">
+        <h3>一、hello world</h3>
+        <div id="app1">{{message}}</div>
+    </div>
+    <div class="box">
+        <h3>二、绑定视图</h3>
+        <div id="app2">
+        <input type="text" v-model="message">
+         <p>您输入的是：{{message}}</p>
+        </div>
+    </div>
+    <div class="box">
+        <h3>三、用script分离模板 <span class="red">vue2.0废掉</span></h3>
+        <div id="app3"><!--bei模板替换-->
+            <p>我会被</p>
+        </div>
+    </div>
+    <div class="box">
+        <h3>四、data</h3>
+        <div id="app4">
+            <h4>初始化的data对象才是响应数据</h4>
+            <span class="red">props也需在初始化时预设好</span>
+            <p>vm.$data获取到的是data对象</p>
+            vm.message=<input style="width: 50%" @change="change" type="text" v-model="old">
+            <p>{{message}}</p>
+            <p>{{msg}}</p>
+        </div>
+    </div>
+    <div class="box">
+        <h3>五、方法</h3>
+        <div id="app5">
+            <h4>通过选项属性<span class="red">methods</span>对象中定义方法，并且使用v-on指令监听DOM事件，例四</h4>
+            <h4>支持自定义事件 <span class="red">events在vue2.0废弃</span></h4>
+            <div @click="click($event)"><button>点我</button></div>
+        </div>
+    </div>
+    <div class="box">
+        <h3>六、生命周期</h3>
+        <div id="app6">
+            <div id="app6-1">
+            <h4>vue1.0</h4>
+            <input type="text" v-model="msg">
+            <p>{{msg}}</p>
+            <ul>
+                <li v-for="fn in funs">{{fn}}</li>
+            </ul>
+            </div>
+            <div id="app6-2">
+                <h4>vue2.0</h4>
+                <input type="text" v-model="newmsg">
+                <p @click="click">【点击销毁】{{newmsg}}</p>
+                <ul>
+                    <li v-for="fn in newfuns">{{fn}}</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="box">
+        <h3>七、数据绑定</h3>
+        <div id="app7">
+         <h4>◆文本插值</h4>
+        <p>{{name}}和<span class="red">{{*name}}vue2.0废弃 </span>改为v-once—>此为单次插值</p>
+        <h4>◆HTML属性 <span class="red">vue2.0废弃</span></h4>
+        <p><xmp><div id="id-{{id}}"></div></xmp><br><xmp><div id="id-1"></div></xmp></p>
+        <h4>◆绑定表达式</h4>
+        <p>简单的Javascript(变量、运算、三元)和多个过滤器</p>
+        <h4>◆过滤器</h4>
+        <p>内置过滤器 <span>vue2.0废弃</span></p>
+        <ol>
+            <li> capitalize ：字符串首字符转化成大写</li>
+            <li> uppercase ：字符串转化成大写</li>
+            <li>lowercase ：字符串转化成小写</li>
+            <li> currency ：参数为{String}[货币符号]{Number}[小数位]将数字转化成货币符号，并且会自动添加数字分节号</li>
+            <li> pluralize ：参数为{String}single,[double,triple]字符串复数化</li>
+            <li> json ：参数为{Number}[indent]空格缩进数，与JSON.stringify()作用相同</li>
+            <li> debounce ：传入值必须是函数，参数可选{Number}[wait],即延时时长，作用是当调用函数n毫秒后执行</li>
+            <li> limitBy ：传入值必须是数组{Number}[limit],{Number}[offset],limit为显示个数，offset为开始显示数组下标。例子：<xmp><div v-for="item in items | limitBy 10"></div></xmp>items为数组，只显示前十个</li>
+            <li> filterBy ：传入值必须是数组，参数为{String|Function}targetStringOrFunction,即需要匹配的字符或函数（通过函数返回true或false来判断匹配结果）
+                <p>【例子一】</p>
+                <p> 检索names数组中值包含1.0的 <span class="orange">元素</span></p>
+                <xmp><p v-for="name in names | filterBy '1.0'">{{name}}</p></xmp>
+                <p>【例子二】</p>
+                <p>检索 items 数组中元素属性 name 值为 1.0 的<span class="orange">元素</span>输出。检索区域也可以为数组，即 in [name,version]，在多个属性中进行检索</p>
+                <xmp><p v-for="item in items | filterBy '1.0' in 'name'">{{item | json}}</p></xmp>
+                <p>【例子三】</p>
+                <p>使用自定义的过滤函数，函数可以在选项 methods 中定义</p>
+                <xmp><p v-for="item in items | filterBy customFilter">{{ item | json}}</p></xmp>
+                <xmp>methods : {
+                    　customFilter : function(item) {
+                    　　if(item.name) return true　// 检索所有元素中包含 name 属性的元素
+                    　}
+                    }</xmp>
+            </li>
+            <li> olderBy ：传入值必须是数组，参数为{String|Array|Function}sortKeys，即指定排序策略
+                 <p>【单个键名排序】</p>
+                <p >items数组中以键名name降序排列</p>
+                <xmp><p v-for="item in items | olderBy 'name' -1">{{item.name}}</p></xmp>
+                <p>【多个键名】</p>
+                <p>使用 items 里的两个键名进行排序</p>
+                <xmp><p v-for="item in items | olderBy [name, version]">{{item.name}}</p></xmp>
+                <p>【自定义排序函数】</p>
+                <xmp><p v-for="item in items | orderBy customOrder">{{item.name}}</p></xmp>
+                <xmp>methods: {
+                    　customOrder: function (a, b) {
+                    　　return parseFloat(a.version) > parseFloat(b.version)　// 对比 item 中
+                    version 的值的大小进行排序
+                    　}
+                    }</xmp>
+            </li>
+
+        </ol>
+        <h4>◆指令（后面讲到）</h4>
+        </div>
+    </div>
+    <div class="box">
+        <h3>八、计算属性</h3>
+        <div id="app8">
+            <p>单价：<input type="text" v-model="price"></p>
+            <p>数量：<input type="text" v-model="count"></p>
+            <p>总价：&yen{{total}}元</p>
+        </div>
+        <h4>计算属性的Setter方法</h4>
+        <div id="app8-1">
+             <p><input type="text" v-model="value"></p>
+             <p>{{back}}</p>
+        </div>
+    </div>
+    <div class="box">
+        <h3>九、表单控件</h3>
+         <div id="app9">
+             <h4>Text</h4>
+             <input type="text" v-model="msg">
+             <p>{{msg}}</p>
+             <h4>Radio</h4>
+             <label for="man"><input type="radio" id="man" value="男" v-model="gender">男</label>
+             <label for="woman"><input type="radio" id="woman" value="女" v-model="gender">女</label>
+             <p>选中的是：{{gender}}</p>
+             <h4>Checkbox</h4>
+             <p>【单个勾选框】</p>
+             <input type="checkbox" v-model="checked">
+             <p>选的是{{checked}}</p>
+             <p>【多个勾选框】</p>
+             <input type="checkbox" id="hebei" value="河北" v-model="multiChecked"><label for="hebei">河北</label>
+             <input type="checkbox" id="shandong" value="山东" v-model="multiChecked"><label for="shandong">山东</label>
+             <input type="checkbox" id="yunnan" value="云南" v-model="multiChecked"><label for="yunnan">云南</label>
+             <input type="checkbox" id="xianggang" value="香港" v-model="multiChecked"><label for="xianggang">香港</label>
+             <p>选中的是：{{multiChecked.join("|")}}</p>
+             <h4>Select</h4>
+             <p>【单选】</p>
+             <select  v-model="selected">
+                 <option value="A" selected>A</option>
+                 <option  value="B">B</option>
+                 <option  value="C">C</option>
+             </select>
+             <p>选择的是：{{selected}}</p>
+             <p>【多选】</p>
+             <select v-model="multiSelected" multiple>
+                 <option value="A" selected>A</option>
+                 <option value="B">B</option>
+                 <option value="C">C</option>
+             </select>
+             <p>选中的是：{{multiSelected.join("|")}}</p>
+             <h4>表单的参数设置</h4>
+             <ol>
+                 <li>lazy <span class="red">Vue2.0废弃（改为修饰符）</span>:
+                     <p>默认情况下，v-model 在 input 事件中同步输入框值与数据，加 lazy 属性后从会改到在change 事件中同步</p>
+                     <xmp><p><input type="text" v-model="message" lazy></p></xmp>
+                     <xmp><p>vue2.0:<input type="text" v-model.lazy="message" lazy></p></xmp>
+                 </li>
+                 <li>number <span class="red">Vue2.0废弃（改为修饰符）</span>:
+                     <p>会自动将用户输入转为 Number 类型，如果原值转换结果为 NaN 则返回原值。</p>
+                     <xmp><p><input type="text" v-model="message" number></p></xmp>
+                     <xmp><p>vue2.0<input type="text" v-model.number="message" lazy></p></xmp>
+                 </li>
+                 <li>debounce:<span class="red">Vue2.0废弃</span>
+                     <p>debounce 为设置的最小延时，单位为 ms，即为单位时间内仅执行一次数据更新。该参数往往应用在高耗操作上，例如在更新时发出 ajax 请求返回提示信息。</p>
+                     <xml><p><input v-model="message" debounce="500" /></p></xml>
+                 </li>
+                 <li>新增：trim 修饰符
+                     <p>去掉输入值首尾空格</p>
+                      <xmp><p><input v-model.trim="message" /></xmp>
+                 </li>
+             </ol>
+         </div>
+    </div>
+    <div class="box">
+        <h3>十、类名和样式的绑定</h3>
+        <div id="app10">
+            <h4>类名</h4>
+             <p>1、对象语法，可与普通class属性共存</p>
+            <div class="circle" v-bind:class="{'bgorange':orange,'bgred':!orange}"></div>
+            <p>2、数组语法</p>
+            <div class="circle" v-bind:class="[color]"></div>
+            <div class="circle" v-bind:class="[color,'fontColor ? red :']">我是三元写法</div>
+            <h4>样式</h4>
+            <p>1、对象语法</p>
+            <div v-bind:style="objStyle">我是对象语法</div>
+            <div v-bind:style="{fontSize:size,color:red}">我是直接绑</div>
+            <p>2、数组语法</p>
+            <div v-bind:style="[objStyle,objBorder]">我是数组方法</div>
+        </div>
+    </div>
+    <div class="box">
+        <h3>十一、内置指令</h3>
+        <div id="app11">
+            <h4>v-if&nbsp;VS&nbsp;v-show</h4>
+            <input type="text" v-model="is" >
+             <div>直接绑定数据：{{is}}</div>
+             <div v-if="is">v-if控制：true</div><div v-else>v-if控制：false</div>
+            <div v-show="is">v-show控制：show</div>
+            <p class="red">陷阱：不能直接给input赋值false来改变v-if和v-show，这样is为字符串"false"</p>
+            <p class="orange">1、v-else要紧跟v-if，不然无效；可以包含子元素</p>
+            <p class="orange">2、v-if 切换时，Vue.js 会有一个局部编译 / 卸载的过程；v-show只是css的切换</p>
+            <h4>v-for</h4>
+            <table>
+                <tbody id="tab">
+                <tr v-for="(product,index) in products" v-bind:key="index">
+                    <td>{{index}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.price}}</td>
+                    <td>
+                        <button type="button" v-on:click="reduce(index)">-</button>
+                        <input type="number" v-model="product.count" disabled min="0" :style="inputStyle">
+                        <button type="button" v-on:click="addCount(index)">+</button>
+                    </td>
+                    <td><button type="button" v-on:click="deletes($event,index)">删除</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="orange"><span class="red">vue2.0</span>当包含参数 index 或 key 时，对象参数修改为（item, index）或（value, key），这样与 JS Array 对象的新方法 forEach 和 map，</p>
+            <p class="orange">需要注意的是 Vue.js 对 data 中数组的原生方法进行了封装，所以在改变数组时能触发视图更新，但以下两种情况是无法触发视图更新的：</p>
+            <h4>v-on</h4>
+            <p>v-on: 后参数接受所有的原生事件名称</p>
+            <button v-on:click="say($event,'看控制台')">快点我，我是绑定的JavaScript语句</button>
+            <button  @keyup="over">按键盘，我是绑定的methods中的方法</button>
+            <p>修饰符</p>
+            <ol>
+                <li>.stop: 等同于调用 event. stopPropagation()。</li>
+                <li>.prevent: 等同于调用 event.preventDefault()。</li>
+                <li>.capture: 使用 capture 模式添加事件监听器。</li>
+                <li> .self: 只当事件是从监听元素本身触发时才触发回调。</li>
+                <li><span class="red">vue2.0</span>.native:vue2.0中v-on只支持自定义事件，若要绑定原生事件需要使用.native修饰符 <br><xmp>"<div v-on:click.native="onClick"></div>"</xmp></li>
+            </ol>
+            <div v-on:click="onClick">
+                <form v-on:submite.stop.prevent="onSubmit">
+                    <span class="red">暂无效果—></span><input type="submit" >
+                </form>
+            </div>
+            <h4>v-text</h4>
+            <p>更新元素的textContent，类似文本插值的{{}}，不同的是v-text需绑定到元素上能避免未编译前的闪烁问题</p>
+            <div class="bgorange" v-text="msg"></div>
+            <h4>v-HTML</h4>
+            <p>和v-text类似，作用是更新元素的innerHTML，接受字符串，不会进行编译等操作，也避免闪烁问题</p>
+            <div v-text="html"></div>
+            <div>{{html}}</div>
+            <div v-html="html"></div>
+            <h4 class="red">v-el</h4>
+            <p>v-el 指令为 DOM 元素注册了一个索引,语法上说，可以通过所属实例的 $els 属性调用，或者在 vm 内部通过 this 进行调用。</p>
+            <p>在 v-el 中如果使用了驼峰式命名，系统会自动转成小写。但可以使用“-”来连接你期望大写的字母</p>
+            <div v-el=""></div>
+            <h4>v-ref <span class="red">vue2.0有调整</span></h4>
+            <p>v-ref和v-el类似，只不过v-ref作用于子组件，实例可以通过$refs访问子组件，如果想使用驼峰命名，使用'-'</p>
+            <div>{{ref}}</div>
+            <div>使用：vm.$refs.myChild</div>
+            <h4>v-pre</h4>
+            <p>v-pre 指令相对简单，就是跳过编译这个元素和子元素，显示原始的 {{}}Mustache 标签，用来减少编译时间。</p>
+            <div v-pre>{{pre}}</div>
+            <h4>v-cloak</h4>
+            <p>v-cloak 指令相当于在元素上添加了一个 [v-cloak] 的属性，直到关联的实例结束编译。官方推荐可以和 css 规则 [v-cloak]{ display :none } 一起使用，可以隐藏未编译的 Mustache标签直到实例准备完毕</p>
+            <div v-cloak>【-{{cloak}}-】</div>
+            <h4>v-once <span class="red">vue2.0新增</span></h4>
+            <p>v-once 指令是 Vue.js 2.0 中新增的内置指令，用于标明元素或组件只渲染一次，即使随
+                后发生绑定数据的变化或更新，该元素或组件及包含的子元素都不会再次被编译和渲染。这样
+                就相当于我们明确标注了这些元素不需要被更新，所以 v-once 的作用是最大程度地提升了更
+                新行为中页面的性能，可以略过一些明确不需要变化的步骤</p>
+            <div>
+                <input type="text" v-model="once">
+                <p v-once>{{once}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="box">
+        <h3>十二、自定义指令</h3>
+        <div id="app12">
+            <h4>注册指令</h4>
+            <p>【全局注册】</p>
+            <div>Vue.directive('global-directive',definition[定义对象])</div>
+            <div>使用:{{globalUse}}</div>
+            <p>【局部注册】</p>
+            <p>var comp=Vue.extend({<br>directives:{<br>"localDirective":function(){}<br>}<br>})</p>
+            <p>该指令就只能在当前组件内通过v-local-directive的方式调用，而无法被其他组件调用。</p>
+            <h4>指令的定义对象【注册指令的时候传入】</h4>
+             <p>我们在注册指令的时候在definition传入，对指令定义一些特殊功能，这个对象主要包含三个钩子函数：bind|update|unbind</p>
+            <ol>
+                <li>bind：只被调用一次，在指令第一次绑定到元素时执行</li>
+                <li>update：指令在bind之后以初始值为参数进行第一次调用，之后每次绑定值发生变化时调用，update接受newValue和oldValue,只需update函数时可以直接传参一个函数</li>
+                <li>unbind：指令从元素上解绑时调用，只调用一次</li>
+                <li>componentUpdated <span class="red">vue2.0新增</span>：钩子函数增加了一个 componentUpdated，当整个组件都完成了 update 状态后即所有DOM 都更新后调用该钩子函数，无论指令接受的参数是否发生变化</li>
+            </ol>
+            <p>【例子】</p>
+            <div>改变指令：<input type="text" v-model="dir"></div>
+            <div>解绑指令：<input type="text" v-model="is"></div>
+            <div v-if="is" v-my-directive="dir">我的指令</div>
+            <h4>指令实例属性</h4>
+            <ol>
+                <li>el：指令绑定的元素</li>
+                <li>vm：该指令的上下文可以为new Vue(),也可以是组件的实例</li>
+                <li>expression：指令的表达式，不包括参数和过滤器</li>
+                <li>arg：指令的参数</li>
+                <li>name：指令的名字不包括v-</li>
+                <li>modifiers：一个对象，包含指令的修饰符</li>
+                <li>descriptor：一个对象包含指令的解析结果</li>
+            </ol>
+            <p>【例子】</p>
+            <h4>元素指令 <span class="red">vue2.0废弃</span></h4>
+             <p >{{commonDir}}</p>
+             <p >{{elementDir}}</p>
+             <p>全局注册</p>
+            <p>Vue.elementDirective('my-ele-directive')</p>
+            <p>局部注册</p>
+            <xmp>var Comp = Vue.extend({　// 局部注册，仅限该组件内使用<br>
+                　… // 省略了其他参数<br>
+                　elementDirectives : {<br>
+                　　'eleDirective' : {}<br>
+                　}<br>
+                });</xmp>
+            <h4>指令的高级选项 <span class="red">待研究</span></h4>
+            <div id="app12-1">
+                <p>1、params</p>
+                <p>定义对象中可以接受一个 params 数组，Vue.js 编译器将自动提取自定义指令绑定元素上的这些属性</p>
+                <input type="text" v-model="par">
+                <div v-directive-prop :a="par"></div>
+                <p>2、deep <span class="red">vue2.0废弃</span></p>
+                <p>当自定义指令作用于一个对象上时，我们可以使用 deep 选项来监听对象内部发生的变化</p>
+                <!-- <div v-my-deep-directive="obj"></div>
+                 <div v-my-nodeep-directive="obj"></div>-->
+                <p>3、towWay</p>
+                <p>在自定义指令中，如果需要向 Vue 实例写回数据，就需要在定义对象中使用 twoWay:true，这样可以在指令中使用 this.set(value) 来写回数据</p>
+                 <p>4、acceptStatement</p>
+                <p>选项 acceptStatement:true 可以允许自定义指令接受内联语句，同时 update 函数接收的值是一个函数，在调用该函数时，它将在所属实例作用域内运行</p>
+                 <p>5、terminal</p>
+                <p>选项 terminal 的作用是阻止 Vue.js 遍历这个元素及其内部元素，并由该指令本身去编译绑定元素及其内部元素。内置的指令 v-if 和 v-for 都是 terminal 指令</p>
+                <p>6、priority</p>
+                <p>选项 priority 即为指定指令的优先级。普通指令默认是 1000，termial 指令默认为2000。同一元素上优先级高的指令会比其他指令处理得早一些，相同优先级则按出现顺序依次处理</p>
+            </div>
+            <h4>指令在vue2.0的变化</h4>
+            <ol>
+                <li>在 Vue.js 2.0 中取消了指令实例这一概念，即在钩子函数中的 this 并不能指向指令的相关属性。指令的相关属性均通过参数的形式传递给钩子函数。</li>
+            <li>钩子函数 update 对比 Vue.js 1.0 也有了以下两点变化：<br>
+                ① 指令绑定 bind 函数执行后不直接调用 update 函数。<br>
+                ② 只要组件发生重绘，无论指令接受的值是否发生变化，均会调用 update 函数。如果
+                需要过滤不必要的更新，则可以使用 binding.value == binding.oldValue 来判断</li>
+                <li>钩子函数接受的参数 binding 对象为不可更改，强行设定 binding.value 的值并不会引起实际的改动。如果非要通过这种方式进行修改的话，只能通过 el 直接修改 DOM 元素。</li>
+            </ol>
+        </div>
+    </div>
+    <div class="box">
+        <h3>十三、自定义过滤器</h3>
+        <div id="app13">
+            <h4>注册过滤器</h4>
+             <p>【全局注册】</p>
+            <p>Vue.filter('date', function(value) {<br>
+                　if(!value instanceof Date) return value;<br>
+                　return value.toLocaleDateString();<br>
+                })</p>
+            <p>【例子】</p>
+            <div>{{ date | date 'yyyy-MM-dd hh:mm:ss' }}</div>
+            <h4>双向过滤器</h4>
+            <p>【例子】</p>
+           <!-- <input type="text" v-model="price">
+            <div>{{price }}</div>-->
+            <p class="orange">双向过滤器和第 2 章中提到的计算属性有点雷同。而 Vue.js 2.0
+                中也取消了过滤器对 v-model、v-on 这些指令的支持，认为会导致更多复杂的情况，而且使
+                用起来并不方便。所以 Vue.js 2.0 中只允许开发者在 {{}} 标签中使用过滤器，像上述对写操
+                作有转化要求的数据，建议使用计算属性这一特性来实现。</p>
+            <h4>动态参数</h4>
+            <p>过滤器除了能接受单引号（''）括起来的参数外，也支持接受在 vm 实例中绑定的数据，称之为动态参数。使用区别就在于不需要用单引号将参数括起来</p>
+            <p>【例子】</p>
+            <input type="text" v-model="price" />
+            <div>{{ date | dynamic price }}</div>
+            <h4>过滤器在vue2.0中的变化</h4>
+            <ol>
+                <li>取消了所有内置过滤器，即 capitalize, uppercase, json 等。作者建议尽量使用单独
+                    的插件来按需加入你所需要的过滤器。不过如果你觉得仍然想使用这些 Vue.js 1.0 中的内置过
+                    滤器，也不是什么难办的事。1.0 源码 filters/ 目录下的 index.js 和 array-filter.js 中就是所
+                    有内置过滤器的源码，你可以挑选你想用的手动加到 2.0 中。</li>
+                <li>取消了对 v-model 和 v-on 的支持，过滤器只能使用在 {{}} 标签中。</li>
+                <li>修改了过滤器参数的使用方式，采用函数的形式而不是空格来标记参数。例如：{{date | date('yyyy-MM-dd') }}</li>
+            </ol>
+        </div>
+    </div>
+    <div class="box">
+        <h3>十四、CSS过渡</h3>
+        <div id="app14">
+            <h4>过渡的用法</h4>
+            <input type="text" v-model="show">
+            <transition name="my-css" appear="true">
+            <div class="my-css" v-show="show" >content</div>
+            </transition>
+        </div>
+    </div>
+</div>
+<div class="wrap">
+    <div class="body">
+    <div id="app">
+        <app-header></app-header>
+        <div class="app-container">
+            <router-view></router-view>
+        </div>
+    </div>
+
+    </div>
+</div>
+<div class="wrap">
+    <div class="box">
+        <h3>十五、组件</h3>
+        <div id="app15">
+            <h4>组件的注册</h4>
+            <p>【构造器】</p>
+            <p>var MyComponent=Vue.extend({...})</p>
+            <p>【全局注册】</p>
+            <p>Vue.component("my-component",MyComponent)</p>
+            <p>【局部注册】</p>
+            <pre v-text='partZhuce'>
+            </pre>
+            <h4>props</h4>
+            <p v-text="propText"></p>
+            <div><span>我是父组件：</span><input type="text" v-model="text"><my-child :text="text"></my-child></div>
+            <p>修饰符.sync和.once <span class="red">vue2.0废弃</span></p>
+            <p class="orange">如果子组件需要改变父组件，那就使用事件机制</p>
+            <div><span>我是父组件：</span><input type="text" v-model="text"><my-child :text.sync="text"></my-child></div>
+            <h4>props验证</h4>
+            <p>使用验证时props的参数不再是一个数组而是一个JSON对象</p>
+            <ol>
+                <li>基础类型检测：prop:Number;接受的参数是原生构造器String、Object、Function、Boolean、Array、null</li>
+                <li>多种类型：prop:[Number,String]</li>
+                <li>参数必须：prop:{type:Number,required:true}</li>
+                <li>参数默认：prop:{type:Number,default:10}如果默认值为数组或者对象需要一函数返回值的形式赋值</li>
+                <li>绑定类型 <span class="red">vue2.0废弃</span>：prop:{towWay:true}</li>
+                <li>自定义验证：prop:{validator:function(value){return value>0}验证值必须大于0</li>
+                <li>转换值 <span class="red">vue2.0废弃</span>：prop: { coerce : function(val) { return parseInt(val) }}，将字符串转化成数值</li>
+            </ol>
+            <h4>组件间的通信</h4>
+            <p>【直接访问】都挂载在组件的this上但是不提倡这么做，导致父子组件紧密耦合</p>
+            <ol>
+                <li>$parent:父组件实例</li>
+                <li>$children:包含所有子组件实例</li>
+                <li>$root:组件所在根实例</li>
+            </ol>
+            <h4>自定义事件监听</h4>
+            <p>events选项<span class="red">vue2.0废弃</span>：<button v-on:click="event"></button></p>
+            <p>$on方法: <button v-on:click="on"></button></p>
+            <h4>自定义事件触发</h4>
+            <p>$emit: <button v-on:click="emit"></button></p>
+            <h4>子组件的索引v-ref <span>vue2.0改为ref属性</span></h4>
+            <b v-text="childIndex.index"></b>
+            <p>可以在父组件使用this.$ref.first获取子组件实例</p>
+            <b v-text="childIndex.for"></b>
+            <p>this.$ref.items为一个数组，包含对应的子组件实例</p>
+            <h4>内容分发</h4>
+              <my-slot>
+                  <div slot="title">{{titles}}</div>
+                  <div slot="content">{{contents}}</div>
+              </my-slot>
+            <h4>动态组件及keep-alive\activate钩子函数</h4>
+            <p>keep-alive在 <span class="red">vue2.0</span>中变为一个标签</p>
+            <div>
+                <span @click="currentView='home'">首页</span>
+                <span @click="currentView='list'">列表页</span>
+                <span @click="currentView='detail'">详情页</span>
+            </div>
+
+            <keep-alive><component :is="currentView" ></component></keep-alive>
+        </div>
+    </div>
+    <div class="box">
+        <h3>vue-router</h3>
+        <div id="app16">
+            <h4>路由对象:调用方式this.$route</h4>
+
+            <ol>
+                <li>$route.path:类型字符串，当前的绝对路径</li>
+                <li>$route.params:类型对象，路由中动态片段和全匹配片段的键值对/list/:page,获取page的值</li>
+                <li>$route.query:类型对象，包含路由中查询参数的键值对/list/1?sort=createTime</li>
+                <li>$route.router:路由实例，组件实例可以this.$router直接调用路由实例，可调用其go\replace方法进行跳转</li>
+                <li>$route.matched:类型数组，包含当前匹配的路径中所有片段对应的配置参数对象</li>
+                <li>$route.name:类型字符串，即当前路由设置的name属性</li>
+            </ol>
+            <h4>路由配置项</h4>
+            <p>在<span class="red">创建路由器实例的时候</span  >，Vue-router 提供了以下参数可供我们配置：</p>
+            <ol>
+                <li>hashbang:默认值true，只在hash模式下可用，路径以#！开头</li>
+                <li>history:默认值为false，设置为true时会启动HTML5history模式，利用history.pushState()和history.replaceState()管理浏览历史记录</li>
+                <li>abstract:默认值为false，提供了不依赖浏览器的历史管理工具</li>
+                <li>root:默认值为null，尽在HTML5history模式下使用，可设置一个应用的根路径，例如：/app,都在/app后添加</li>
+                <li>linkActiveClass:默认值为v-link-active,与v-link中的activeClass选项类似，这里相当于一个全局的设定，符合匹配规则的链接就会加上linkActiveClass设定的类名</li>
+                <li>saveScrollPosition:默认值false，尽在HTML5history模式下可用，用户点击后退按钮时借助HTML5history中的popstate事件对应的state来重置页面的滚动未知，注意 <span class="red">router-view设置的场景切换效果时无效</span></li>
+                <li>transitionOnLoad:默认值为false，在 router-view 中组件初次加载时是否使用过渡效果。默认情况下，组件在初次加载时会直接渲染，不使用过渡效果</li>
+                <li>suppressTransitionError:默认值为 false。设定为 true 后，将忽略场景切换钩子函数中发生的异常</li>
+            </ol>
+            <h4>路由test</h4>
+             <ul>
+                 <li :style="navListStyle"><router-link to="/rec">推荐</router-link></li>
+                 <li :style="navListStyle"><router-link to="/sale/:id">销量</router-link></li>
+                 <li :style="navListStyle"><router-link to="/price">价格</router-link></li>
+             </ul>
+            <div><router-view></router-view></div>
+            <div><router-view name="main"></router-view></div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    var vm=new Vue({
+        el:'#app1',
+        data:{
+            message:'hello world'
+        }
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app2",
+        data:{
+            message:'请输入内容'
+        },
+        replace:true
+    })
+</script>
+<script id="tpl" type="x-template">
+    <div class="tpl" id="app3"><p>我才是王者</p></div>
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app3",
+        template:"#tpl",
+        replace:false
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app4",
+        data:{
+            old:'',
+            message:'',
+            msg:null/*需占位，如果没有这个属性但是dom用到了{{msg}}会报错*/
+        },
+        methods:{
+            change:function () {
+                this.message=this.old;
+                this.msg=this.old;
+            }
+        }
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app5",
+        data:{
+            message:'点我的'
+        },
+        methods:{
+            click:function (event) {
+                var that=this;
+                event.target.style.color='#ff7000';
+                var timer=setTimeout(function () {
+                    event.target.style.color='#000';
+                    window.clearInterval(timer);
+                },1000)
+            }
+        },
+        events:{
+            'events-click':function () {
+                alert(this.message);
+            }
+        }
+    });
+    vm.$emit('events-click')
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app6-1",
+        data:{
+            msg:"改变",
+            funs:["init","created","beforeCompile","compiled","attached","dettached","beforeDestroy","destroyed","ready"]
+        },
+        init:function () {
+            console.log("init");
+        },
+        created:function () {
+            console.log("created");
+        },
+        beforeCompile:function () {
+            console.log("beforeCompile");
+        },
+        compiled:function () {
+            console.log("compiled");
+        },
+        attached:function () {
+            console.log("attached");
+        },
+        dettached:function () {
+            console.log("dettached");
+        },
+        beforeDestroy:function () {
+            console.log("beforeDestroy");
+        },
+        destroyed:function () {
+            console.log("destroyed");
+        },
+        ready:function () {
+            console.log("ready");
+        }
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app6-2",
+        data:{
+            newmsg:"改变",
+            newfuns:["beforeCreate","created","beforeMount","mounted","beforeDestroy","destroyed","beforeUpdate","updated","activated"]
+        },
+        methods:{
+            click:function () {
+                this.$destroy();
+            }
+        },
+        beforeCreate:function () {
+            console.log("beforeCreate");
+        },
+        created:function () {
+
+            console.log("created");
+        },
+        beforeMount:function () {
+
+            console.log("beforeMount");
+        },
+        mounted:function () {
+
+            console.log("mounted");
+        },
+        beforeDestroy:function () {
+
+            console.log("beforeDestroy");
+        },
+        destroyed:function () {
+
+            console.log("destroyed");
+        },
+        beforeUpdate:function () {
+
+            console.log("beforeUpdate");
+        },
+        updated:function () {
+
+            console.log("updated");
+        },
+        activated:function () {
+
+            console.log("activated");
+        }
+        
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app8",
+        data:{
+            price:'',
+            count:''
+        },
+        computed:{
+            total:function () {
+                return this.price*this.count
+            }
+        }
+    })
+    var vm=new Vue({
+        el:"#app8-1",
+        data:{
+            back:''
+        },
+        computed:{
+            value:{
+                set:function (newValue) {
+                    this.back=newValue*100;
+                },
+                get:function () {
+                    return (this.back/100).toFixed(2)
+                }
+            }
+        }
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app9",
+        data:{
+            message:'请看我',
+            msg:'',
+            gender:'',
+            checked:'',
+            multiChecked:[],
+            selected:'',
+            multiSelected:[]
+        }
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app10",
+        data:{
+            orange:false,
+            color:"bgorange",
+            fontColor:true,
+            red:"red",
+            objBorder:{
+                border:"1px solid #ff7000"
+            },
+            objStyle:{
+                width:'200px',
+                height:'20px',
+                background:"blue",
+                textAlign:"center",
+                lineHeight:"20px",
+                color:"#fff"
+            },
+            size:"20px"
+        }
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:'#app11',
+        data:{
+            is:'',
+            products:[
+                {name:"电视",price:"3000",count:1},
+                {name:"热水器",price:"300",count:1},
+                {name:"冰箱",price:"1800",count:1},
+                {name:"空调",price:"2000",count:1}
+            ],
+            inputStyle:{
+                width:"50px"
+            },
+            msg:'大家好',
+            html:"<div>我是v-html</div>",
+            ref:"<div v-ref='my-child'></div>",
+            pre:"<div>我是v-pre</div>",
+            cloak:"我隐藏了未编译前的我",
+            once:"one"
+        },
+        methods:{
+            addCount:function (index) {
+                this.products[index].count++;
+            },
+            reduce:function (index) {
+                this.products[index].count>1&&this.products[index].count--;
+            },
+            deletes:function (event,index) {
+                this.products.splice(index, 1);
+            },
+            over:function (event) {
+                alert("看控制台");
+                console.log(event);
+            },
+            say:function (event,info) {
+                alert(info);
+                console.log(event);
+            },
+            onSubmit:function () {
+                alert("提交")
+            },
+            onClick:function () {
+
+            }
+
+        }
+    })
+
+</script>
+<script>
+    Vue.directive("my-directive",{
+         bind:function () {
+             console.log("bind",arguments)
+             console.log(this)
+             /*console.log('el',this,el)*/
+             console.log('vm',this.vm);
+             console.log("arg",this.arg)
+             console.log('name',this.name)
+             console.log('modifiers',this.modifiers)
+             console.log('descriptor',this.descriptor);
+         },
+        update:function (newValue,oldValue) {
+            console.log("update",newValue,oldValue)
+        },
+        unbind:function () {
+            console.log("unbind",arguments);
+        }
+    })
+
+    var vm=new Vue({
+        el:"#app12",
+        data:{
+            globalUse:"<p v-global-directive></p>",
+            dir:"ok",
+            is:true,
+            commonDir:"<div v-my-directive>我是普通指令</div>",
+            elementDir:"<my-directive>我是元素指令</my-directive>",
+            obj : {
+                a : {
+                    b : 'inner'
+                }
+            },
+            par:'params'
+        },
+
+    })
+    Vue.directive("directive-prop",{
+        params:['a'],
+        paramWatchers : {
+            a : function(val, oldVal) {
+                console.log('watcher: ', val, oldVal)
+            }
+        },
+        bind:function () {
+            console.log('params',this.params)
+        }
+    })
+
+    Vue.directive('my-deep-directive', {
+        deep : true,
+        update : function(newValue, oldValue) {
+            console.log('deep', newValue.a.b);
+        }
+    });
+    Vue.directive('my-nodeep-directive', {
+        update : function(newValue, oldValue) {
+            console.log('deep', newValue.a.b);
+        }
+    });
+    var vm=new Vue({
+        el:"#app12-1",
+        data:{
+            par:"params"
+        }
+    })
+
+</script>
+<script>
+    Vue.filter('date', function(value, format) {
+        var o = {
+            "M+": value.getMonth() + 1, // 月份
+            "d+": value.getDate(), // 日
+            "h+": value.getHours(), // 小时
+            "m+": value.getMinutes(), // 分
+            "s+": value.getSeconds(), // 秒
+        };
+        if (/(y+)/.test(format))
+            format = format.replace(RegExp.$1, (value.getFullYear() + "").
+            substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(format))
+                format = format.replace(RegExp.$1, (RegExp.$1.length == 1)
+                    ? (o[k])
+                    : (("00" + o[k]).substr(("" + o[k]).length)));
+        return format;
+    });
+    Vue.filter('cents', {
+        read : function(value) {
+            return (value / 100).toFixed(2);
+        },
+        write : function(value) {
+            return value * 100;
+        }
+    });
+
+    var vm=new Vue({
+        el:"#app13",
+        data:{
+            date:new Date(),
+            price:100
+        }
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app14",
+        data:{
+            show:false,
+            Style:{
+                width:"100px",
+                height:"0",
+                opacity:'0',
+                background:"green",
+            }
+        }
+    })
+</script>
+<script>
+         Vue.component("my-slot",{
+             template:"<div><div class='title'>标题：<slot name='title'></slot></div><div class='content'>内容：<slot name='content'></slot></div></div>"
+         })
+    var vm=new Vue({
+        el:"#app15",
+        data:{
+            currentView:'home',
+            titles:"slot分发",
+            contents:"发吧发吧发吧发吧",
+            propText:"同指令等情况相同，由于 HTML 属性不区分大小写，如果我们在 <my-child> 中的\
+            属性使用驼峰式 myParam 命名，即 <my-child myParam='…'>，那在 props 中的命名即\
+    为 props: ['myparam']。所以如果需要使用驼峰式命名的话，我们需要在标签中使用 my-\
+    param，用“-”的方式隔开，这样在 props 中就可以使用 props: ['myParam'] 的形式进行\
+    声明。",
+            partZhuce:'var Child=Vue.extend({\n\
+            template:"<div><p>this is child</p><my-child></my-child></div>"\n\
+        })\n\
+    var Parent=Vue({\n\
+        template:"<p>this is parent</p>",\n\
+        components:{"my-child":Child}\n\
+    )',
+            childIndex:{index:"<child-todo v-ref:first></child-todo>",for:'<li v-for="item" v-ref:items> </li>'},
+            text:"我是父组件的"
+        },
+        components:{
+            "my-child":{
+            props:["text"],
+            template:"<div><span>我是子组件：</span><input type='text' v-model='text'></div>"
+            },
+            home:{
+                data:function () {
+                  return {
+                      items:[]
+                  }
+                },
+                mounted:function () {
+                    console.log("fetch data");
+                    this.items=[1,2,3,4,5]
+                },
+                activate : function(done) {
+                    var that = this;
+                    // 此处的 setTimeout 用于模拟正式业务中的 ajax 异步请求数据
+                    setTimeout(function() {
+                        that.items = [1, 2, 3, 4, 5];
+                        done();
+                    }, 1000);
+                },
+                template:"<div>Home</div><ul><li v-for='item in items'>{{item}}</li></ul>"
+            },
+            list:{template:"<div>List</div>"},
+            detail:{template:"<div>Detail</div>"}
+        },
+        methods:{
+            on:function () {
+                this.$on("reduce",function () {
+                    alert("我是$on监听的")
+                })
+            },
+            event:function () {
+                this.$emit("event");
+            },
+            emit:function () {
+                this.$emit("reduce")
+            }
+        },
+        events:{
+            "event":function () {
+                alert("events自定义事件监听")
+            }
+        }
+    })
+</script>
+<script>
+    var routes=[
+        {path:"/rec",component:{template:"<div>推荐的不错</div>"}},
+
+        {
+            path:"/sale/:id",
+            component:{
+                data:function () {
+                  return {
+                      products:[
+                          {id:"01",name:"电视"},
+                          {id:"02",name:"电脑"},
+                          {id:"03",name:"电话"},
+                          {id:"04",name:"电线"},
+                      ]
+                  }
+                },
+                template:"<div><ul><li v-for='product in products'><router-link to='{path:{{product.id}}}'>{{product.id}}{{product.name}}</router-link> </li></ul><div style='float: right'><router-view></router-view></div></div>",
+            },
+            children:[
+                {path:"id",component:{
+                    template:"<div>{{product.name}}</div>"
+                }}
+            ]
+        },
+
+        {path:"/price",component:{template:"<div>价格实惠</div>"}}
+    ]
+    var router=new VueRouter({
+        routes:routes
+    })
+
+    var vm=new Vue({
+        el:"#app16",
+        data:{
+           navListStyle:{display:'inline-block',width:"30%"},
+
+        },
+        router:router
+    })
+</script>
+<!--事件-->
+<!--<script>
+    var Box=document.getElementsByClassName("box");
+    var H=document.getElementsByTagName("h3");
+    var ary=[];
+    for(var i=0; i<Box.length;i++){
+        ary.push(H[i].clientHeight);
+        Box[i].style.height=H[i].clientHeight+"px";
+        Box[i].style.overflow="hidden";
+        H[i].index=i;
+        H[i].app=i+1;
+        H[i].falg=true;
+        H[i].onclick=function () {
+            var i=this.index;
+            var app=this.app;
+            if(this.flag){
+                Box[i].style.height=document.getElementById("app"+app).clientHeight+ary[i]+"px"
+                Box[i].style.padding="2px";
+                Box[i].style.overflow="auto";
+                this.flag=false;
+            }else {
+                Box[i].style.height=ary[i]+"px";
+                Box[i].style.padding="0px";
+                Box[i].style.overflow="hidden";
+                this.flag=true;
+            }
+
+        }
+    }
+</script>-->
+<!--APP-->
+<!--全局过滤器-->
+<script>
+    Vue.filter("money",function (value) {
+        return value+"¥"
+    })
+</script>
+<!--组件-->
+<script>
+    Vue.component("app-header",{
+        data:function () {
+          return {
+              input:'',
+              isSearch:false
+          }
+        },
+        methods:{
+           searchCtrl:function () {
+               this.isSearch=!this.isSearch
+           },
+            navSearchCtrl:function () {
+                this.isSearch?this.isSearch=false:null;
+            }
+        },
+        template:' <nav class="navbar navbar-inverse" @click.stop="navSearchCtrl">\
+        <div class="container">\
+        <div class="collapse navbar-collapse">\
+        <ul class="nav navbar-nav" v-show="!isSearch">\
+        <li style="padding: 8px"><img style="width: 30px;height: 30px" src="./image/logo.png" alt=""><li>\
+        <li><router-link to="/">首页</router-link></li>\
+        <li><router-link to="/book">小册</router-link></li>\
+        <li><router-link to="/about">关于</router-link></li>\
+        <li style="float:right;padding: 10px;">\
+        <img style="width:20px;height:30px;" src="./image/classify.png" alt="分类" v-on:click.stop>\
+        </li>\
+        <li style="float:right;padding: 10px 2px;">\
+        <img style="width:30px;height:30px;" src="./image/icon_search.png" alt="search" v-on:click.stop="searchCtrl">\
+        </li>\
+        </ul>\
+        <ul class="nav navbar-nav" v-show="isSearch">\
+        <li style="padding: 5px 0;">\
+        <el-input  v-model="input" placeholder="请输入内容" v-on:click.native.stop></el-input>\
+        </li>\
+         <li style="float:right;padding: 10px;">\
+        <img style="width:20px;height:30px;" src="./image/classify.png" alt="分类" v-on:click.stop>\
+        </li>\
+        </ul>\
+        </div>\
+        </div>\
+        </nav>'
+    })
+    /*swiper*/
+    Vue.component("app-swiper",{
+        data:function () {
+          return {
+              swiperImg:["./image/1.png","./image/2.png","./image/3.png","./image/4.png","./image/5.jpg"]
+          }
+        },
+        template:' <div class="block">\
+        <el-carousel height="100px" trigger="click">\
+        <el-carousel-item v-for="(item,index) in swiperImg" :key="item">\
+        <a href=""><img :src="item" alt="" style="width: 100%;height: 100%"></a>\
+    </el-carousel-item>\
+    </el-carousel>\
+    </div>'
+    })
+    /*show*/
+    Vue.component("app-show",{
+        data:function () {
+            return {
+                products:[
+                    {
+                        id:10000000,
+                        name:"满199减120三只松鼠_甘栗仁100gx2袋休闲零食坚果特产板栗仁栗子仁美栗",
+                        price:30.80,
+                        picUrl:"https://m.360buyimg.com/n1/s220x220_jfs/t13624/64/813254185/319705/22ad9991/5a144dc0Nda135504.jpg!q70.jpg",
+                        sale:300
+                    },
+                    {
+                        id:10000001,
+                        name:"满199减120三只松鼠_甘栗仁100gx2袋休闲零食坚果特产板栗仁栗子仁美栗",
+                        price:"50.50",
+                        picUrl:"https://m.360buyimg.com/n1/s220x220_jfs/t2818/310/2562677429/383124/904760af/576a0430N1d4c34ea.jpg!q70.jpg",
+                        sale:23
+                    },
+                    {
+                        id:10000002,
+                        name:"满199减120三只松鼠_甘栗仁100gx2袋休闲零食坚果特产板栗仁栗子仁美栗",
+                        price:29.80,
+                        picUrl:"https://m.360buyimg.com/n1/s220x220_jfs/t5992/60/3675298633/370474/c59bd0a3/595625eeN020c87f0.jpg!q70.jpg",
+                        sale:256
+                    },
+                    {
+                        id:10000003,
+                        name:"满199减120三只松鼠_甘栗仁100gx2袋休闲零食坚果特产板栗仁栗子仁美栗",
+                        price:32.00,
+                        picUrl:"https://m.360buyimg.com/n1/s220x220_jfs/t9145/259/2680899041/226711/34bd3cdb/59dc7db2N59a48cbb.jpg!q70.jpg",
+                        sale:1580
+                    },
+                    {
+                        id:10000004,
+                        name:"满199减120三只松鼠_甘栗仁100gx2袋休闲零食坚果特产板栗仁栗子仁美栗",
+                        price:26.80,
+                        picUrl:"https://m.360buyimg.com/n1/s220x220_jfs/t2833/13/3653315307/325322/cc820012/57959f44Ne7c05daf.jpg!q70.jpg",
+                        sale:678
+                    }
+                ]
+            }
+        },
+        methods:{
+            commendClick:function () {
+
+            },
+            saleClick:function () {
+                this.products=this.products.sort(function (sale1,sale2) {
+                    var a=sale1.sale;
+                    var b=sale2.sale;
+                    return a-b;
+                })
+            },
+            priceClick:function () {
+                this.products=this.products.sort(function (price1,price2) {
+                    var a=price1.price;
+                    var b=price2.price;
+                    return a-b;
+                })
+            }
+        },
+          template:'<div>\
+          <ul class="sub-nav">\
+        <li v-on:click="commendClick">推荐</li>\
+        <li v-on:click="saleClick">销量</li>\
+        <li v-on:click="priceClick">价格</li>\
+        </ul>\
+        <div  style="background-color: #F5F5F5">\
+        <app-list v-bind:products="products"></app-list>\
+        </div>\
+          </div> '
+    })
+    /*列表*/
+    Vue.component("app-list",{
+        props:["products"],
+        template:'<div>\
+        <ul class="clear">\
+        <li class="pro-list" v-for="(product ,index) in products" :pro-id="product.id">\
+        <a href="">\
+       <div class="img-box"><img :src="product.picUrl" alt="pro"></div>\
+        <div class="pro-desc"><span>{{product.name}}</span></div>\
+        <p class="pro-price">{{product.price | money}}</p></a>\
+        </li>\
+        </ul>\
+        </div>'
+    })
+    var Home={template:'<div><app-swiper></app-swiper><app-show></app-show></div>'};
+    var Book={template:'<div>小册</div>'};
+    var About={template:'<div>关于</div>'};
+</script>
+<!--router-->
+<script>
+    var routes=[
+        {path:'/',component:Home},
+        {path:'/book',component:Book},
+        {path:'/about',component:About},
+    ]
+    var router=new VueRouter({
+        routes:routes
+    })
+</script>
+<script>
+var vm=new Vue({
+    el:"#app",
+    data:{
+        radio:"1"
+    },
+    router:router
+})
+</script>

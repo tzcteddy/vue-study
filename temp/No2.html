@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue</title>
+   <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/vue/2.1.3/vue.js"></script>-->
+    <script type="text/javascript" src="../js/libs/vue.min.js"></script>
+</head>
+<body>
+<section id="app-8">
+    {{data}}
+</section>
+<div id="app1">
+    <p>12345</p>
+</div>
+<div id="app2">
+    <p>{{a}}</p>
+    <p>{{b}}</p>
+    <p>{{c}}</p>
+</div>
+<!--<my-component title='myTitle' content='myContent'></my-component>-->
+<div id="app3">
+    <p>{{ name }}</p>
+</div>
+<div id="app4">
+    <label><input type="radio" value="male" v-model="gender "> 男 </label>
+        <label><input type="radio" value="female" v-model="gender "> 女 </label>
+            <p>{{ gender }}</p>
+</div>
+<div id="app5">
+    <label><input type="checkbox" value="1" v-model=" multiChecked">1</label>
+        <label><input type="checkbox" value="2" v-model=" multiChecked">2</label>
+            <label><input type="checkbox" value="3" v-model=" multiChecked">3</label>
+                <p>选中的有: {{ multiChecked.join('、') }}</p>
+</div>
+<div id="app6">
+    <ul>
+        <li v-for="(item,index) in items">
+            <p>{{index}}name:{{item.name}}</p>
+            <p>{{index}}age:{{item.age}}</p>
+        </li>
+    </ul>
+    <p>{{yu}}</p>
+</div>
+<div id="app7">
+    <p v-if="a">A</p>
+    <p v-else="a">a</p>
+    <p v-show="b">B</p>
+</div>
+<div id="app8">
+    <anonymouse-slot>
+        <div id="content">{{content}}</div>
+        <p slot="title">{{title}}</p>
+    </anonymouse-slot>
+</div>
+<div id="app9">
+    <it-parent></it-parent>
+</div>
+<div id="app10">fu:<input type="text" v-model="msg"><it-props :msg.sync="msg"></it-props></div>
+<div id="app11">
+    <switchbtn :result="result" @on-result-change="onResultChange"></switchbtn>
+    <input type="button" value="change" @click="change">
+</div>
+<div id="app12">
+    <input type="text" v-model="content">
+    <button @click="addTodo">添加</button>
+    <button @click="broadcast">广播</button>
+    <child-todo name="one"></child-todo>
+    <child-todo name="two"></child-todo>
+    <ul>
+        <li v-for="value in todo">{{value}}</li>
+    </ul>
+</div><!--事件的派发和触发-->
+<div id="app13">
+    <ul>
+        <li @click="currentView='home'">Home</li>
+        <li @click="currentView='list'">List</li>
+        <li @click="currentView='detail'">Detail</li>
+    </ul>
+   <component :is="currentView"></component>
+
+</div><!--动态组件-->
+</body>
+</html>
+<!--<script id="tpl" type="x-template">
+    <div class="tpl">
+        <p>我要替换你</p>
+    </div>
+</script>-->
+<!--<script>
+    new Vue({
+        el:"#app1",
+        template:"#tpl"
+    })
+</script>-->
+<!--<script>
+   var vm2 = new Vue({
+        el:"#app2",
+        data:{
+            a:1
+        }
+    })
+    vm2.a="a1";
+   vm2.$data.b="b2";
+   vm2.$set("c","c3")
+</script>-->
+<!--<script>
+    var myComponent = Vue.component('my-component', {
+        props : ['title', 'content'],
+        template : '<h1>{{title}}</h1><p>{{content}}</p>'
+    })
+</script>
+<script>
+    var vm = new Vue({
+        el:"#app3",
+        data:{
+            name:"age"
+        }
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app4",
+        data:{
+            gender:null
+        }
+    })
+</script>
+<script>
+    new Vue({
+        el:"#app5",
+        data:{
+            multiChecked:[]
+        }
+    })
+</script>-->
+<!--<script>
+    var vm=new Vue({
+        el:"#app6",
+        data:{
+            items:[
+                {name:"张三",age:"27"},
+                {name:"李四",age:"109"},
+                {name:"赵五",age:"210"}
+            ]
+        }
+    });
+</script>-->
+<script>
+    var vm = new Vue({
+        el:"#app7",
+        data:{
+            a:true,
+            b:false
+        }
+    })
+</script>
+<!--
+<script>
+    var myVue=new Vue({
+        el:"#app-8",
+        data:{
+            data:"我负责帮助主人查看生命周期的",
+            info:"nono"
+        },
+        beforeCreate:function(){
+            console.log("创建前========")
+            console.log(this.data)
+            console.log(this.$el)
+        },
+        created:function(){
+            console.log("已创建========")
+            console.log(this.info)
+            console.log(this.$el)
+        },
+        beforeMount:function(){
+            console.log("mount之前========")
+            console.log(this.info)
+            console.log(this.$el)
+        },
+        mounted:function(){
+            console.log("mounted========")
+            console.log(this.info)
+            console.log(this.$el)
+        },
+        beforeUpdate:function(){
+            console.log("更新前========");
+            console.log(this.info)
+            console.log(this.$el)
+        },
+        updated:function(){
+            console.log("更新完成========");
+            console.log(this.info)
+            console.log(this.$el)
+        },
+        beforeDestroy:function(){
+            console.log("销毁前========")
+            console.log(this.info)
+            console.log(this.$el)
+        },
+        destroyed:function(){
+            console.log("已销毁========")
+            console.log(this.info)
+            console.log(this.$el)
+        }
+    })
+</script>-->
+<script>
+    Vue.component("anonymouse-slot",{
+      template:"<div>\
+      <div class='title'>\
+       <slot name='title'></slot>\
+       </div>\
+       <div class='content'>\
+       <slot></slot>\
+       </div>\
+      </div>"
+    })
+    new Vue({
+        el:"#app8",
+        data:{
+            title:"this is a title",
+            content:"this is a content"
+        }
+    })
+
+</script>
+<script>
+    var Parent=Vue.extend({
+        data:function () {
+            return {
+                num:1,
+                msg:"父组件的值"
+            }
+        },
+        template:"<div><it-child snum='1' v-bind:num='num' v-bind:msg='msg'></it-child></div>"
+    })
+    Vue.component("it-parent",Parent);
+    var Child=Vue.extend({
+        data:function () {
+            return{
+                info:"子组件的值"
+            }
+        },
+        props:["msg","num","snum"],
+        template:"<div><p>这是字符串{{snum}}</p><p>这是数字{{num}}</p><p>这是：{{msg}}</p><p>这是：{{info}}</p></div>"
+    })
+    Vue.component("it-child",Child)
+    var vm=new Vue({
+        el:"#app9"
+    })
+</script>
+<script>
+    Vue.component("it-props",{
+        props:["msg"],
+        template:"<div>zi:<input type='text' v-model='msg' v-on:change='onChange()'></div>",
+        data:function () {
+            return {
+                myMsg:this.msg
+            }
+        },
+        watch:{
+            msg:function (val) {
+                this.myMsg=val;
+            },
+            myMsg:function (val) {
+                this.$emit("change",val)
+            }
+        },
+        methods:{
+            change:function () {
+                this.myMsg=!this.myMsg;
+            }
+        }
+    })
+    var vm=new Vue({
+        el:"#app10",
+        data:{
+            msg:""
+        },
+        methods:{
+            change:function () {
+                this.myMsg=!this.myMsg;
+            },
+            onChange:function (val) {
+                this.myMsg=val;;
+            }
+        }
+    })
+</script>
+<script>
+    Vue.component("switchbtn", {
+        template: "<div @click='change'>{{myResult?'开':'关'}}</div>",
+        props: ["result"],
+        data: function () {
+            return {
+                myResult: this.result//①创建props属性result的副本--myResult
+            };
+        },
+        watch: {
+            result(val) {
+                this.myResult = val;//②监听外部对props属性result的变更，并同步到组件内的data属性myResult中
+            },
+            myResult(val){
+                //xxcanghai 小小沧海 博客园
+                this.$emit("on-result-change",val);//③组件内对myResult变更后向外部发送事件通知
+            }
+        },
+        methods: {
+            change() {
+                this.myResult = !this.myResult;
+            }
+        }
+    });
+
+    new Vue({
+        el: "#app11",
+        data: {
+            result: true
+        },
+        methods: {
+            change() {
+                this.result = !this.result;
+            },
+            onResultChange(val){
+                this.result=val;//④外层调用组件方注册变更方法，将组件内的数据变更，同步到组件外的数据状态中
+            }
+        }
+    });
+</script>
+<script>
+    var bus=new Vue();
+    Vue.component("child-todo",{
+        props:['name'],
+        data:function () {
+            return {
+                content:''
+            }
+        },
+        template:'<div>\
+        Child{{name}}\
+        <input type="text" v-model="content">\
+        <button @click="add">添加</button>\
+        </div>',
+        methods:{
+            add:function () {
+                bus.$emit('addp','Child'+this.name+':'+this.content);
+                this.content='';
+            }
+        }
+    })
+    var vm=new Vue({
+        el:"#app12",
+        data:{
+            todo:[],
+            content:""
+        },
+        methods:{
+            addTodo:function () {
+                bus.$emit("addp",'Parent:'+this.content);
+                this.content='';
+            },
+            broadcast:function () {
+                bus.$emit('to-child',this.content);
+                this.content='';
+            }
+        },
+        mounted:function () {
+            var that=this;
+            bus.$on("addp",function(msg){that.todo.push(msg);})
+            bus.$on("to-child",function(){bus.$emit('add','Child'+this.name+":"+this.name)})
+
+        }
+    })
+</script>
+<script>
+    var vm=new Vue({
+        el:"#app13",
+        data:{
+            currentView:"home",
+        },
+        components:{
+            home:{
+                template:'<div>\
+                <p>Home</p>\
+                <ul>\
+                <li v-for="item in items">{{item}}</li>\
+                </ul>\
+                </div>',
+                data:function () {
+                    return {
+                        items:[]
+                    }
+                },
+                ready:function () {
+                    console.log('fetch data')
+                    this.items=[1,2,3,4]
+                },
+                activate:function (down) {
+                    var that=this;
+                    setTimeout(function () {
+                        that.items=[1,2,3,4,5];
+                        down();
+                    },1000)
+                }
+            },
+            list:{
+                template:'<div>List</div>'
+            },
+            detail:{
+                template:'<div>Detail</div>'
+            }
+        }
+    })
+</script>
+

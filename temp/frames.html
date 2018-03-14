@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .box{
+            margin: 0 auto;
+            width: 375px;
+            height: 697px;
+           border: 2px solid #99ee99;
+        }
+        .search{
+            margin: 0 auto;
+            width: 375px;
+            height: 30px;
+        }
+        .search input{
+            padding: 0 20px;
+            width: 332px;
+            height: 30px;
+        }
+        .frames{
+            width: 375px;
+            height: 667px;
+        }
+        .frames iframe{
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="search">
+        <input type="text" v-model="url">
+
+    </div>
+    <div class="frames">
+        <iframe v-bind:src="url"  frameborder="0"></iframe>
+    </div>
+    <input type="month" >
+    <input type="week" >
+    <input type="time" >
+</div>
+</body>
+</html>
+<script src="../js/libs/vue.min.js"></script>
+<script>
+    new Vue({
+        el:"#box",
+        data:{
+            url:"http://m.baidu.com"
+        }
+    })
+</script>
